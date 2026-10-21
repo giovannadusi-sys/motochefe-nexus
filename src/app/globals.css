@@ -1,0 +1,189 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Ativa a variante dark: baseada numa classe (.dark no <html>), não
+   só em prefers-color-scheme — necessário para o toggle manual
+   claro/escuro/automático funcionar independente do SO. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================================================
+   DESIGN TOKENS — Motochefe Nexus
+   Identidade: preto/cinza-escuro + amarelo como cor de marca,
+   nos dois temas. O que muda entre claro e escuro é o fundo/
+   superfícies; o amarelo continua a cor de ação em ambos.
+   ========================================================= */
+:root {
+  --background: #f6f7f9;
+  --surface: #ffffff;
+  --foreground: #14151a;
+  --muted-foreground: #6b7280;
+  --border-soft: rgba(18, 20, 28, 0.08);
+
+  --primary: #f2b400;
+  --primary-foreground: #1a1400;
+  --primary-hover: #d9a200;
+
+  --accent-volt: #b6ff3d;
+  --accent-volt-foreground: #12141c;
+
+  --success: #1fae6a;
+  --success-bg: #e9f9f1;
+  --danger: #e5484d;
+  --danger-bg: #fdecec;
+  --warning: #f5a524;
+  --warning-bg: #fef6e7;
+
+  --muted: #eef0f4;
+  --skeleton-base: #eceef2;
+  --skeleton-shine: #f8f9fb;
+
+  --shadow-card:
+    0px 0px 0px 1px rgba(18, 20, 28, 0.06),
+    0px 1px 2px -1px rgba(18, 20, 28, 0.06),
+    0px 2px 4px 0px rgba(18, 20, 28, 0.04);
+  --shadow-card-hover:
+    0px 0px 0px 1px rgba(18, 20, 28, 0.08),
+    0px 2px 4px -1px rgba(18, 20, 28, 0.08),
+    0px 6px 12px 0px rgba(18, 20, 28, 0.06);
+  --shadow-popover:
+    0px 0px 0px 1px rgba(18, 20, 28, 0.06),
+    0px 8px 24px -4px rgba(18, 20, 28, 0.12);
+
+  --ease-out-swift: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-swift: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out-swift: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --duration-instant: 100ms;
+  --duration-fast: 160ms;
+  --duration-base: 220ms;
+  --duration-polish: 360ms;
+}
+
+/* =========================================================
+   TEMA ESCURO — preto/cinza-escuro, amarelo como destaque.
+   Toda superfície fica um degrau mais clara que o fundo (não
+   tudo na mesma cor), para as sombras/cards continuarem
+   comunicando profundidade mesmo sem luz para "jogar sombra".
+   ========================================================= */
+.dark {
+  --background: #121212;
+  --surface: #1c1c1f;
+  --foreground: #ececea;
+  --muted-foreground: #a3a3a0;
+  --border-soft: rgba(255, 255, 255, 0.09);
+
+  --primary: #ffc300;
+  --primary-foreground: #1a1400;
+  --primary-hover: #ffd633;
+
+  --accent-volt: #c6ff5c;
+  --accent-volt-foreground: #12141c;
+
+  --success: #34d488;
+  --success-bg: rgba(31, 174, 106, 0.16);
+  --danger: #ff6b70;
+  --danger-bg: rgba(229, 72, 77, 0.16);
+  --warning: #f5b94a;
+  --warning-bg: rgba(245, 165, 36, 0.16);
+
+  --muted: #242427;
+  --skeleton-base: #242427;
+  --skeleton-shine: #2e2e32;
+
+  --shadow-card:
+    0px 0px 0px 1px rgba(255, 255, 255, 0.07),
+    0px 1px 2px -1px rgba(0, 0, 0, 0.22),
+    0px 2px 4px 0px rgba(0, 0, 0, 0.14);
+  --shadow-card-hover:
+    0px 0px 0px 1px rgba(255, 255, 255, 0.09),
+    0px 2px 4px -1px rgba(0, 0, 0, 0.26),
+    0px 6px 12px 0px rgba(0, 0, 0, 0.18);
+  --shadow-popover:
+    0px 0px 0px 1px rgba(255, 255, 255, 0.07),
+    0px 8px 24px -4px rgba(0, 0, 0, 0.4);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+
+  --color-accent-volt: var(--accent-volt);
+  --color-accent-volt-foreground: var(--accent-volt-foreground);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* =========================================================
+   ACESSIBILIDADE — obrigatório, sem exceções.
+   Neutraliza toda animação/transição para quem prefere
+   menos movimento, preservando o estado final (sem "pulos"
+   de layout).
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skeleton shimmer — pausável via prefers-reduced-motion acima */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--skeleton-base) 30%,
+    var(--skeleton-shine) 50%,
+    var(--skeleton-base) 70%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Entrada suave para cards/listas renderizados no servidor —
+   não precisa de JS/Client Component para existir. */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in-up var(--duration-polish) var(--ease-out-swift) both;
+}
